@@ -1,0 +1,6 @@
+<div class="center_align">
+    <select class = "country_name" ng-model="timerCtrl.currentCountry"
+            ng-options="item.countryName for item in timerCtrl.countryInfo" ng-change="timerCtrl.onCountryNameChanged()">
+    </select>
+    <span class = "timer">{{ timerCtrl.timerStr }}</span>
+</div>

@@ -3,22 +3,15 @@
         "use strict";
 
         angular.module("timerApp", [])
-                .directive("timer", Timer);
-
-        function Timer() {
-            var ddo = {
-                templateUrl: "timer.html",
-                controller: TimerController,
-                controllerAs: "timerCtrl"
-            };
-
-            return ddo;
-        }
+                .component("timer", {
+                    templateUrl: "timer.html",
+                    controller: TimerController,
+                });
 
         TimerController.$inject = ["$interval"];
         function TimerController($interval) {
-            var timerCtrl = this;
-            timerCtrl.timerStr = getCurrentTime();
+            var $ctrl = this;
+            $ctrl.timerStr = getCurrentTime();
             
             function CountryInfo(countryName, offsetInMinutes) {
                 this.countryName = countryName;
@@ -26,30 +19,31 @@
             }
 
             {
-                timerCtrl.countryInfo = [];
-                timerCtrl.countryInfo.push(new CountryInfo("India", 5 * 60 + 30));
-                timerCtrl.countryInfo.push(new CountryInfo("USA", -4 * 60));
+                $ctrl.countryInfo = [];
+                $ctrl.countryInfo.push(new CountryInfo("India", 5 * 60 + 30));
+                $ctrl.countryInfo.push(new CountryInfo("USA", -4 * 60));
             }
 
-            timerCtrl.currentCountry = timerCtrl.countryInfo[1];
+            $ctrl.currentCountry = $ctrl.countryInfo[1];
 
-            console.log(timerCtrl.currentCountry);
-            timerCtrl.onCountryNameChanged = function() {
-                console.log(timerCtrl.currentCountry);
+            console.log($ctrl.currentCountry);
+            $ctrl.onCountryNameChanged = function() {
+                console.log($ctrl.currentCountry);
+                $ctrl.timerStr = getCurrentTime();
             }
             
             $interval(function() {
-                timerCtrl.timerStr = getCurrentTime();
+                $ctrl.timerStr = getCurrentTime();
             }, 1000);
 
             function getCurrentTime() {
                 var date = new Date();
                 
                 var localDate = null;
-                if (timerCtrl.currentCountry === undefined) {
+                if ($ctrl.currentCountry === undefined) {
                     localDate = date;
                 } else {
-                    localDate = new Date(date.getTime() + (date.getTimezoneOffset() + timerCtrl.currentCountry.offsetInMinutes) * 60 * 1000);
+                    localDate = new Date(date.getTime() + (date.getTimezoneOffset() + $ctrl.currentCountry.offsetInMinutes) * 60 * 1000);
                 }
 
                 var hr = normalizeIntToTwoCharString(localDate.getHours());
